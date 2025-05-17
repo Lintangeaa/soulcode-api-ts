@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 
 export const webhookWaba = (req: Request, res: Response) => {
-  const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
+  const VERIFY_TOKEN =
+    'EAAP9ticn5usBO4ZB5I3nUq4AExwH87D3X36gK9R6Mq14M7h5Qk8z4XjTZBKPJzpNKZCcPl6YJSwplLhUkp30CvlxDADqc84ZAJZCkqsvwLNkYefCbAWBFmjESd9EZB1zzhBj53x52Jbsvxjf0g3qIdxAEeqbZC7uCKt88JDeUC7ZCAYjSE2eQBZCalQL9LTQ2OGInjNDymcTUEGmKUsnGGZA5GgirOhaYZD';
+
   const mode = req.query['hub.mode'];
   const token = req.query['hub.verify_token'];
   const challenge = req.query['hub.challenge'];
