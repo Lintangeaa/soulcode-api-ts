@@ -19,7 +19,7 @@ export const verifyWebhookWaba = (req: Request, res: Response) => {
 
 export const webhookWaba = (req: Request, res: Response) => {
   const { object, entry } = req.body;
-  console.log(object, entry);
+  console.log(JSON.stringify(entry.changes[0].value));
   return res
     .status(200)
     .json({ message: 'Webhook received', data: { object, entry } });
