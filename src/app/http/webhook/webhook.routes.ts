@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { webhookWaba } from './webhook.controller.js';
+import { verifyWebhookWaba, webhookWaba } from './webhook.controller.js';
 
 const webhookRouter = Router();
 
-webhookRouter.get('/waba', webhookWaba as any);
+webhookRouter.get('/waba', verifyWebhookWaba as any);
+webhookRouter.post('/waba', webhookWaba as any);
 
 export default webhookRouter;
