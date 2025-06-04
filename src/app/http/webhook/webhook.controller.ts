@@ -1,4 +1,8 @@
 import { Request, Response } from 'express';
+import logger from '../../../libs/helpers/logger.js';
+import WabaService from '../../../shared/services/waba.service.js';
+
+const wabaService = new WabaService();
 
 export const verifyWebhookWaba = (req: Request, res: Response) => {
   const VERIFY_TOKEN =
@@ -9,18 +13,35 @@ export const verifyWebhookWaba = (req: Request, res: Response) => {
   const challenge = req.query['hub.challenge'];
 
   if (mode === 'subscribe' && token === VERIFY_TOKEN) {
-    console.log('[Webhook] Verification success');
+    logger.info('[Webhook] Verification success');
     return res.status(200).send(challenge as string);
   } else {
-    console.warn('[Webhook] Verification failed');
+    logger.warn('[Webhook] Verification failed');
     return res.sendStatus(403);
   }
 };
 
-export const webhookWaba = (req: Request, res: Response) => {
-  const { object, entry } = req.body;
-  console.log(JSON.stringify(entry));
-  return res
-    .status(200)
-    .json({ message: 'Webhook received', data: { object, entry } });
+export const webhookWaba = async (req: Request, res: Response) => {
+  const payload: WhatsAppWebhookPayload = req.body;
+
+  for (const entry of payload.entry) {
+    for (const change of entry.changes) {
+      const contactName = change.value.contacts[0].profile.name;
+
+      for (const message of change.value.messages) {
+        logger.info(message);
+
+        const pesan = `Selamat datang di Soulcdeo, Kak ${contactName}!`;
+
+        const sendMessage = await wabaService.sendMessage('text', {
+          noHp: message.from,
+          message: pesan,
+        });
+
+        logger.info(sendMessage);
+      }
+    }
+  }
+
+  return res.sendStatus(200);
 };

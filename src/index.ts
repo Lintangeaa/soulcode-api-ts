@@ -1,25 +1,25 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
-import webhookRouter from './app/http/webhook/webhook.routes.js';
+import httpRouter from './app/http/index.js';
+import logger from './libs/helpers/logger.js';
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Logger
 app.use(morgan('dev'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/webhook', webhookRouter);
+app.use(httpRouter);
 
 app.get('/', (_req, res) => {
   res.send('✅ Hello World!');
 });
 
 app.listen(port, () => {
-  console.log(`🚀 Server running at http://localhost:${port}`);
+  logger.info(`Server is running on http://localhost:${port}`);
 });
