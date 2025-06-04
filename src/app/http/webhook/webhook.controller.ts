@@ -23,6 +23,8 @@ export const verifyWebhookWaba = (req: Request, res: Response) => {
 
 export const webhookWaba = async (req: Request, res: Response) => {
   const payload: WhatsAppWebhookPayload = req.body;
+
+  console.log('payload', JSON.stringify(payload));
   const contactName =
     payload.entry[0]?.changes[0]?.value.contacts[0]?.profile?.name || 'Soul';
 
