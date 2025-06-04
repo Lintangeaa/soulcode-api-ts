@@ -20,5 +20,5 @@ COPY --from=build /app/dist ./dist
 COPY .env ./dist/.env
 
 WORKDIR /app/dist
-EXPOSE 5000
+EXPOSE 8110
 CMD ["pnpm", "start"]
