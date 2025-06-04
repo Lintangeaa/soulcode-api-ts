@@ -23,15 +23,15 @@ export const verifyWebhookWaba = (req: Request, res: Response) => {
 
 export const webhookWaba = async (req: Request, res: Response) => {
   const payload: WhatsAppWebhookPayload = req.body;
+  const contactName =
+    payload.entry[0]?.changes[0]?.value.contacts[0]?.profile?.name || 'Soul';
 
   for (const entry of payload.entry) {
     for (const change of entry.changes) {
-      const contactName = change.value.contacts[0].profile.name;
-
       for (const message of change.value.messages) {
         logger.info(message);
 
-        const pesan = `Selamat datang di Soulcdeo, Kak ${contactName}!`;
+        const pesan = `Selamat datang di Soulcode, Kak ${contactName}!😊`;
 
         const sendMessage = await wabaService.sendMessage('text', {
           noHp: message.from,
