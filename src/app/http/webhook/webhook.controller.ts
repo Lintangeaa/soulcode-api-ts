@@ -25,22 +25,37 @@ export const webhookWaba = async (req: Request, res: Response) => {
   const payload: WhatsAppWebhookPayload = req.body;
 
   console.log('payload', JSON.stringify(payload));
-  const contactName =
-    payload.entry[0]?.changes[0]?.value.contacts[0]?.profile?.name || 'Soul';
 
   for (const entry of payload.entry) {
     for (const change of entry.changes) {
-      for (const message of change.value.messages) {
-        logger.info(message);
+      const value = change.value;
 
-        const pesan = `Selamat datang di Soulcode, Kak ${contactName}!😊`;
+      // 🔹 Pesan masuk dari user (type: messages)
+      if (value.messages) {
+        const contactName = value.contacts?.[0]?.profile?.name || 'Soul';
 
-        const sendMessage = await wabaService.sendMessage('text', {
-          noHp: message.from,
-          message: pesan,
-        });
+        for (const message of value.messages) {
+          logger.info(message);
 
-        logger.info(sendMessage);
+          const pesan = `Selamat datang di Soulcode, Kak ${contactName}! 😊`;
+
+          const sendMessage = await wabaService.sendMessage('text', {
+            noHp: message.from,
+            message: pesan,
+          });
+
+          logger.info(sendMessage);
+        }
+      }
+
+      // 🔹 Status update dari pesan kita (type: statuses)
+      if (value.statuses) {
+        for (const status of value.statuses) {
+          logger.info('Status update:', status);
+
+          // Contoh logika tambahan: update database, analytics, dll.
+          // if (status.status === 'delivered') { ... }
+        }
       }
     }
   }

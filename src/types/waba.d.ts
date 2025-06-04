@@ -18,6 +18,7 @@ interface WhatsAppWebhookValue {
   metadata: WhatsAppWebhookMetadata;
   contacts: WhatsAppWebhookContact[];
   messages: WhatsAppWebhookMessage[];
+  statuses: WhatsAppWebhookStatus[];
 }
 
 interface WhatsAppWebhookMetadata {
@@ -32,6 +33,13 @@ interface WhatsAppWebhookContact {
 
 interface WhatsAppWebhookProfile {
   name: string;
+}
+
+interface WhatsAppWebhookStatus {
+  id: string;
+  status: string;
+  timestamp: string;
+  recepient_id: string;
 }
 
 interface WhatsAppWebhookMessage {
